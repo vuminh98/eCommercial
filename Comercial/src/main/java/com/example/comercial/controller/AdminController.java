@@ -17,6 +17,7 @@ import java.util.Optional;
 public class AdminController {
     @Autowired
     private ICrudService<User, Long> adminService;
+    @Autowired
     private IAdminService iAdminService;
 
     @GetMapping
