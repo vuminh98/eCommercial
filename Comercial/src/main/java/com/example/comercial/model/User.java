@@ -30,8 +30,6 @@ public class User {
     @Column(unique = true)
     @NotNull
     private String phone;
-    @ManyToOne
-    private Role role;
     @NotNull
     @Column(columnDefinition = "integer default 1")
     private Integer status = 1;
