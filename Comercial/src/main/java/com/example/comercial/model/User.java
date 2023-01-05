@@ -29,4 +29,5 @@ public class User {
     private String phone;
     @ManyToOne
     private Role role;
+    private Integer status;
 }
