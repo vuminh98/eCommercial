@@ -1,5 +1,7 @@
 package com.example.comercial.model.product;
 
+import com.example.comercial.model.Review;
+import com.example.comercial.model.Store;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,4 +34,6 @@ public class Product {
     private String image;
     @ManyToOne
     private Category category;
+    @ManyToOne
+    private Store store;
 }

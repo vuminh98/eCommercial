@@ -24,4 +24,10 @@ public class Payment {
     private LocalDate dateCreated;
     @NotNull
     private Double totalPrice;
+
+    public Payment(Long id, User user, Store store) {
+        this.id = id;
+        this.user = user;
+        this.store = store;
+    }
 }

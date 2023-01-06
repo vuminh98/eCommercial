@@ -4,6 +4,7 @@ import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Check;
 
 import javax.persistence.*;
 
@@ -29,4 +30,7 @@ public class User {
     private String phone;
     @ManyToOne
     private Role role;
+    @NotNull
+    @Check(constraints = "wallet >= 0")
+    private Double wallet;
 }

@@ -18,7 +18,5 @@ public class Review {
     private String content;
     private String rate;
     @ManyToOne
-    private Store store;
-    @ManyToOne
     private Product product;
 }
