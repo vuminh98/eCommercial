@@ -13,14 +13,14 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("admin")
+@RequestMapping("/admin")
 public class AdminController {
     @Autowired
     private IAdminService iAdminService;
     @Autowired
     private UserService userService;
 
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<List<User>> findAllUser() {
         List<User> userList = userService.findAll();
         if (userList.isEmpty()) {
