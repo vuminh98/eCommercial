@@ -1,11 +1,9 @@
 package com.example.comercial.repository;
 
-import com.example.comercial.model.Role;
+import com.example.comercial.model.product.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IRoleRepository extends JpaRepository<Role, Long> {
-    Role findByName(String name);
-
+public interface IProductRepository extends JpaRepository<Product,Long> {
 }

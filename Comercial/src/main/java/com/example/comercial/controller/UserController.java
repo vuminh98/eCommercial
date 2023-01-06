@@ -58,8 +58,9 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> update(@RequestBody User user, @PathVariable Long id) {
-        User userUpdate = userService.findById(id).get();
-        if (userUpdate != null) {
+        Optional<User> userUpdate = userService.findById(id);
+        if (userUpdate.isPresent()) {
+            user.setRoles(userUpdate.get().getRoles());
             return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
         }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

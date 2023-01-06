@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -60,7 +61,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/api/login").permitAll()
                 .antMatchers("/users**").permitAll()
+<<<<<<< HEAD
                 .antMatchers("/admin**/**").permitAll()
+=======
+                .antMatchers("/admin**").permitAll()
+>>>>>>> 937be8be6d17525d784872726eea8cdd13430418
 //                .antMatchers("/users**").hasRole("ADMIN")
 //                .antMatchers("/users/update").hasAnyRole("BUYER", "SELLER")
                 .anyRequest().authenticated()
@@ -71,4 +76,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.cors();
     }
+
 }

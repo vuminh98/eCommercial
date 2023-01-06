@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Check;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+//import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,6 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
+@Check(constraints = "wallet >= 0")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,10 +36,14 @@ public class User {
     @Column(unique = true)
     @NotNull
     private String phone;
+<<<<<<< HEAD
     @NotNull
     @Column(columnDefinition = "double default 0.0")
     @Check(constraints = "wallet >= 0")
     private Double wallet = 0.0;
+=======
+    private Double wallet;
+>>>>>>> 937be8be6d17525d784872726eea8cdd13430418
     @NotNull
     @Column(columnDefinition = "integer default 1")
     private Integer status = 1;
@@ -47,11 +52,11 @@ public class User {
         joinColumns = {@JoinColumn(name = "user_id")},
         inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Role> roles;
-    public List<GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
-        }
-        return authorities;
-    }
+//    public List<GrantedAuthority> getAuthorities() {
+//        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+//        for (Role role : roles) {
+//            authorities.add(new SimpleGrantedAuthority(role.getName()));
+//        }
+//        return authorities;
+//    }
 }

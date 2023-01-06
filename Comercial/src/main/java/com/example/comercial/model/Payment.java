@@ -20,14 +20,8 @@ public class Payment {
     private User user;
     @ManyToOne
     private Store store;
-    @NotNull
     private LocalDate dateCreated;
-    @NotNull
+    private boolean status;
     private Double totalPrice;
 
-    public Payment(Long id, User user, Store store) {
-        this.id = id;
-        this.user = user;
-        this.store = store;
-    }
 }
