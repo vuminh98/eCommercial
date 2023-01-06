@@ -11,31 +11,18 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AdminService implements ICrudService<User, Long>, IAdminService {
+public class AdminService implements IAdminService {
     @Autowired
-    private IUserRepository userRepository;
-
-    @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public Optional<User> findById(Long aLong) {
-        return userRepository.findById(aLong);
-    }
-
-    @Override
-    public User save(User user) {
-        return userRepository.save(user);
-    }
-
-    @Override
-    public void deleteById(Long aLong) {
-    }
-
+    private UserService userService;
+    @Autowired
+    private RoleService roleService;
     @Override
     public void activeBlockUser(Long id, Integer status) {
-       findById(id).get().setStatus(status);
+        userService.findById(id).get().setStatus(status);
+    }
+    @Override
+    public void addRole(Long id) {
+        userService.findById(id).get().setStatus(1);
+        userService.findById(id).get().getRoles().add(roleService.findByName("ROLE_BUYER"));
     }
 }
