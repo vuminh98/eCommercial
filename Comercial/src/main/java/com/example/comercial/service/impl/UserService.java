@@ -1,16 +1,20 @@
 package com.example.comercial.service.impl;
 
 import com.example.comercial.model.User;
+import com.example.comercial.model.UserPrinciple;
 import com.example.comercial.repository.IUserRepository;
 import com.example.comercial.service.ICrudService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 @Service
-public class UserService implements ICrudService<User, Long> {
+public class UserService implements ICrudService<User, Long>, UserDetailsService {
     @Autowired
     private IUserRepository userRepository;
 
@@ -45,5 +49,14 @@ public class UserService implements ICrudService<User, Long> {
         userBuyer.setWallet(userBuyer.getWallet()-totalPrice);
         userRepository.save(userSeller);
         userRepository.save(userBuyer);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        if (!userOptional.isPresent()) {
+            throw new UsernameNotFoundException(username);
+        }
+        return UserPrinciple.build(userOptional.get());
     }
 }

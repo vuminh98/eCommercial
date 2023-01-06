@@ -2,7 +2,7 @@ package com.example.comercial.controller;
 
 import com.example.comercial.model.User;
 import com.example.comercial.service.IAdminService;
-import com.example.comercial.service.ICrudService;
+import com.example.comercial.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +16,13 @@ import java.util.Optional;
 @RequestMapping("admin")
 public class AdminController {
     @Autowired
-    private ICrudService<User, Long> adminService;
-    @Autowired
     private IAdminService iAdminService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public ResponseEntity<List<User>> findAllUser() {
-        List<User> userList = adminService.findAll();
+        List<User> userList = userService.findAll();
         if (userList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -31,7 +31,7 @@ public class AdminController {
 
     @GetMapping("user/{id}")
     public ResponseEntity<User> findUserById(@PathVariable Long id) {
-        Optional<User> userOptional = adminService.findById(id);
+        Optional<User> userOptional = userService.findById(id);
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -40,11 +40,21 @@ public class AdminController {
 
     @PutMapping("/id={id}&status={status}")
     public ResponseEntity<User> activeBlockUser(@PathVariable Long id, @PathVariable Integer status) {
-        Optional<User> userOptional = adminService.findById(id);
+        Optional<User> userOptional = userService.findById(id);
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         iAdminService.activeBlockUser(id, status);
-        return new ResponseEntity<>(adminService.save(userOptional.get()), HttpStatus.OK);
+        return new ResponseEntity<>(userService.save(userOptional.get()), HttpStatus.OK);
+    }
+
+    @PutMapping("/id={id}&add_role_buyer")
+    public ResponseEntity<User> addRoleBuyer(@PathVariable Long id) {
+        Optional<User> userOptional = userService.findById(id);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        iAdminService.addRole(id);
+        return new ResponseEntity<>(userService.save(userOptional.get()), HttpStatus.OK);
     }
 }
