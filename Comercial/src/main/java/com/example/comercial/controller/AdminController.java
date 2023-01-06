@@ -54,4 +54,13 @@ public class AdminController {
         return new ResponseEntity<>(adminService.save(userOptional.get()), HttpStatus.OK);
     }
 
+    @PutMapping("/id={id}&add_role_buyer")
+    public ResponseEntity<User> addRoleBuyer(@PathVariable Long id) {
+        Optional<User> userOptional = adminService.findById(id);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        userOptional.get().getRoles().add(roleService.findByName("ROLE_BUYER"));
+        return new ResponseEntity<>(adminService.save(userOptional.get()), HttpStatus.OK);
+    }
 }
