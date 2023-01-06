@@ -17,7 +17,6 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotNull
     @Check(constraints = "quantity >= 0")
     private Integer quantity;

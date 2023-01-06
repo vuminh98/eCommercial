@@ -31,8 +31,6 @@ public class User {
     @Column(unique = true)
     @NotNull
     private String phone;
-    @ManyToOne
-    private Role role;
     @NotNull
     @Check(constraints = "wallet >= 0")
     private Double wallet;

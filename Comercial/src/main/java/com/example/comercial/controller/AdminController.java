@@ -3,6 +3,8 @@ package com.example.comercial.controller;
 import com.example.comercial.model.User;
 import com.example.comercial.service.IAdminService;
 import com.example.comercial.service.ICrudService;
+import com.example.comercial.service.impl.RoleService;
+import com.example.comercial.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,10 @@ public class AdminController {
     private ICrudService<User, Long> adminService;
     @Autowired
     private IAdminService iAdminService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public ResponseEntity<List<User>> findAllUser() {
@@ -47,4 +53,5 @@ public class AdminController {
         iAdminService.activeBlockUser(id, status);
         return new ResponseEntity<>(adminService.save(userOptional.get()), HttpStatus.OK);
     }
+
 }
