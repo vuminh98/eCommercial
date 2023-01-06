@@ -1,4 +1,4 @@
-package com.example.comercial.service;
+package com.example.comercial.service.cart;
 
 import com.example.comercial.model.Cart;
 import com.example.comercial.model.HistoryBuy;
