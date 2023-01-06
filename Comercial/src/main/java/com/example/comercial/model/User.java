@@ -35,7 +35,10 @@ public class User {
     @Column(unique = true)
     @NotNull
     private String phone;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9a56bd3c00fefb0815617f3cb707e625b84908d2
     @NotNull
     @Column(columnDefinition = "double default 0.0")
     @Check(constraints = "wallet >= 0")
