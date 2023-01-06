@@ -7,6 +7,7 @@ import com.example.comercial.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -20,10 +21,13 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
+    PasswordEncoder passwordEncoder;
+    @Autowired
     private RoleService roleService;
 
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<List<User>> findAll() {
+
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
     @GetMapping("/{id}")
@@ -40,8 +44,11 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<User> create(@RequestBody User user) {
         Optional<User> checkUser = userService.findByUsername(user.getUsername());
+        String encodePassword;
+        encodePassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodePassword);
         if (!checkUser.isPresent()) {
-            Role role = roleService.findByName("ROLE_BUYER");
+            Role role = roleService.findByName("BUYER");
             user.setRoles(new HashSet<>());
             user.getRoles().add(role);
             return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
