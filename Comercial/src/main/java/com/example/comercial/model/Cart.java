@@ -13,16 +13,12 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Check(constraints = "price >= 0 AND quantity > 0")
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotNull
-    @Check(constraints = "quantity >= 0")
     private Integer quantity;
-    @NotNull
-    @Check(constraints = "price >= 0")
     private Double price;
     @ManyToOne
     private User user;

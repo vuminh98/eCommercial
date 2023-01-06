@@ -15,6 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
+@Check(constraints = "wallet >= 0")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,10 +32,6 @@ public class User {
     @Column(unique = true)
     @NotNull
     private String phone;
-    @ManyToOne
-    private Role role;
-    @NotNull
-    @Check(constraints = "wallet >= 0")
     private Double wallet;
     @NotNull
     @Column(columnDefinition = "integer default 1")

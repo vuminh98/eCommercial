@@ -4,17 +4,16 @@ import com.example.comercial.model.Cart;
 import com.example.comercial.model.HistoryBuy;
 import com.example.comercial.model.Payment;
 import com.example.comercial.model.User;
-import com.example.comercial.repository.ICartRepository;
-import com.example.comercial.repository.IHistoryBuyRepository;
-import com.example.comercial.repository.IPaymentRepository;
-import com.example.comercial.repository.IUserRepository;
+import com.example.comercial.model.product.Product;
+import com.example.comercial.repository.*;
+import com.example.comercial.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +27,9 @@ public class CartService {
     @Autowired
     private IHistoryBuyRepository historyBuyRepository;
     @Autowired
-    private IUserRepository userRepository;
+    private UserService userService;
+    @Autowired
+    private IProductRepository productRepository;
 
 
     public Optional<Cart> findCartById(Long id) {
@@ -36,13 +37,17 @@ public class CartService {
     }
     public boolean save(Cart cart) {
         Optional<Cart> cartUpdate = cartRepository.findByProductAndUser(cart.getProduct(),cart.getUser());
+        Product product = productRepository.findById(cart.getProduct().getId()).get();
+        double discount = product.getPrice()*(1-(product.getDiscount().doubleValue()/100));
         try {
             if  (cartUpdate.isPresent()) {
-                cartUpdate.get().setQuantity(cartUpdate.get().getQuantity()+cart.getQuantity());
-                cartUpdate.get().setPrice(cartUpdate.get().getPrice()*cartUpdate.get().getQuantity());
-                cartRepository.save(cartUpdate.get());
+                    cartUpdate.get().setQuantity(cartUpdate.get().getQuantity() + cart.getQuantity());
+                    double total = discount*cartUpdate.get().getQuantity();
+                    cartUpdate.get().setPrice(Math.ceil(total * 100) / 100);
+                    cartRepository.save(cartUpdate.get());
             }else{
-                cart.setPrice(cart.getProduct().getPrice()*cart.getQuantity());
+                double total = discount*cart.getQuantity();
+                cart.setPrice(Math.ceil(total * 100) / 100);
                 cartRepository.save(cart);
             }
             return true;
@@ -51,11 +56,11 @@ public class CartService {
             return false;
         }
     }
-    public boolean  delete(Long id){
-        Optional<Cart> cart = cartRepository.findById(id);
+    public boolean  delete(Cart cart){
+        Optional<Cart> cartDelete = cartRepository.findByProductAndUser(cart.getProduct(),cart.getUser());
         try {
-            if  (cart.isPresent()) {
-                cartRepository.deleteById(id);
+            if  (cartDelete.isPresent()) {
+                cartRepository.deleteById(cartDelete.get().getId());
                 return true;
             }else{
                 return false;
@@ -86,28 +91,20 @@ public class CartService {
         try {
             double totalPrice = 0;
             List<Cart> carts = (List<Cart>) cartRepository.findAllByUserId(userId);
-            paymentRepository.save(new Payment(0L, carts.get(1).getUser(), carts.get(1).getProduct().getStore()));
-            Payment payment = paymentRepository.findByUserIdAndStoreId(carts.get(1).getUser().getId(),
-                    carts.get(1).getProduct().getStore().getId()).get();
+            paymentRepository.save(new Payment(0L, carts.get(0).getUser(), carts.get(0).getProduct().getStore(),
+                    LocalDate.now(),false,0.0));
+            Payment payment = paymentRepository.findByUserIdAndStoreId(carts.get(0).getUser().getId(),
+                    carts.get(0).getProduct().getStore().getId()).get();
             for (Cart cart : carts) {
                 totalPrice += cart.getPrice();
                 historyBuyRepository.save(new HistoryBuy(0L,payment,cart.getProduct(),cart.getQuantity()));
             }
             payment.setTotalPrice(totalPrice);
-            payment.setDateCreated(LocalDate.now());
             paymentRepository.save(payment);
-            cartRepository.deleteAllCartByUserId(userId);
-
-            User userSeller = userRepository.findById(carts.get(1).getProduct().getStore().getUser().getId()).get();
-            User userBuyer = userRepository.findById(userId).get();
-            userSeller.setWallet(userSeller.getWallet()+totalPrice);
-            userBuyer.setWallet(userBuyer.getWallet()-totalPrice);
-            userRepository.save(userSeller);
-            userRepository.save(userBuyer);
-
+//            cartRepository.deleteAllCartByUserId(userId);
+            userService.payment(userId,carts.get(0).getProduct().getStore().getUser().getId(),totalPrice);
             return true;
         }catch (Exception e){
-            e.printStackTrace();
             return false;
         }
     }

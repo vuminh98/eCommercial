@@ -31,9 +31,9 @@ public class CartController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Cart> deleteCart(@PathVariable long id){
-        if (cartService.delete(id)){
+    @DeleteMapping("/delete")
+    public ResponseEntity<Cart> deleteCart(@RequestBody Cart cart){
+        if (cartService.delete(cart)){
             return new ResponseEntity<>(HttpStatus.OK);
         }else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -47,11 +47,15 @@ public class CartController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
-    @PostMapping("/payment/{id}")
-    private ResponseEntity<Payment> payment(@PathVariable("id") long userId){
-        if (cartService.payment(userId)){
-            return new ResponseEntity<>(HttpStatus.OK);
-        }else {
+    @PutMapping("/payment/{id}")
+    private ResponseEntity<Payment> payment(@PathVariable("id") Long userId){
+        try{
+            if (cartService.payment(userId)){
+                return new ResponseEntity<>(new Payment(),HttpStatus.OK);
+            }else {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+        }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }

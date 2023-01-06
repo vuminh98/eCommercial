@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Check(constraints = "quantity >= 0")
 public class HistoryBuy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +22,5 @@ public class HistoryBuy {
     private Payment payment;
     @ManyToOne
     private Product product;
-    @NotNull
-    @Check(constraints = "quantity >= 0")
     private Integer quantity;
 }

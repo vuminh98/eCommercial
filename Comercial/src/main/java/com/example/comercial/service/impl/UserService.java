@@ -5,6 +5,7 @@ import com.example.comercial.repository.IUserRepository;
 import com.example.comercial.service.ICrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,5 +36,14 @@ public class UserService implements ICrudService<User, Long> {
 
     public Optional<User> findByUsername(String name){
         return userRepository.findByUsername(name);
+    }
+    @Transactional
+    public void payment(Long buyerId,Long sellerId,double totalPrice){
+        User userSeller = userRepository.findById(sellerId).get();
+        User userBuyer = userRepository.findById(buyerId).get();
+        userSeller.setWallet(userSeller.getWallet()+totalPrice);
+        userBuyer.setWallet(userBuyer.getWallet()-totalPrice);
+        userRepository.save(userSeller);
+        userRepository.save(userBuyer);
     }
 }
