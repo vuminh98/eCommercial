@@ -66,13 +66,4 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/id={id}&status_pending")
-    public ResponseEntity<User> activeBlockUser(@PathVariable Long id) {
-        User userUpdate = userService.findById(id).get();
-        if (userUpdate != null) {
-           userUpdate.setStatus(2);
-           return new ResponseEntity<>(userService.save(userUpdate), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
 }

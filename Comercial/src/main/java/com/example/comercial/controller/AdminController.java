@@ -20,22 +20,13 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/list")
+    @GetMapping
     public ResponseEntity<List<User>> findAllUser() {
         List<User> userList = userService.findAll();
         if (userList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(userList, HttpStatus.OK);
-    }
-
-    @GetMapping("user/{id}")
-    public ResponseEntity<User> findUserById(@PathVariable Long id) {
-        Optional<User> userOptional = userService.findById(id);
-        if (!userOptional.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
     }
 
     @PutMapping("/id={id}&status={status}")
@@ -48,7 +39,7 @@ public class AdminController {
         return new ResponseEntity<>(userService.save(userOptional.get()), HttpStatus.OK);
     }
 
-    @PutMapping("/id={id}&add_role_buyer")
+    @PutMapping("/id={id}&add_role_seller")
     public ResponseEntity<User> addRoleBuyer(@PathVariable Long id) {
         Optional<User> userOptional = userService.findById(id);
         if (!userOptional.isPresent()) {
