@@ -36,14 +36,10 @@ public class User {
     @Column(unique = true)
     @NotNull
     private String phone;
-<<<<<<< HEAD
     @NotNull
     @Column(columnDefinition = "double default 0.0")
     @Check(constraints = "wallet >= 0")
     private Double wallet = 0.0;
-=======
-    private Double wallet;
->>>>>>> 937be8be6d17525d784872726eea8cdd13430418
     @NotNull
     @Column(columnDefinition = "integer default 1")
     private Integer status = 1;
