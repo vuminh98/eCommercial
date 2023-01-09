@@ -5,16 +5,17 @@ import com.example.comercial.model.Payment;
 import com.example.comercial.repository.ICartRepository;
 import com.example.comercial.repository.IPaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-
+@Service
 public class PaymentService {
     @Autowired
     private IPaymentRepository paymentRepository;
 
 
-    private void save(Payment payment){
-        paymentRepository.save(payment);
+    public Iterable<Payment> findAllByUserId(long userId) {
+        return paymentRepository.findAllByUserId(userId);
     }
 }

@@ -23,6 +23,6 @@ public class AdminService implements IAdminService {
     @Override
     public void addRole(Long id) {
         userService.findById(id).get().setStatus(1);
-        userService.findById(id).get().getRoles().add(roleService.findByName("ROLE_BUYER"));
+        userService.findById(id).get().getRoles().add(roleService.findByName("SELLER"));
     }
 }
