@@ -65,6 +65,24 @@ public class UserController {
         }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+    @PutMapping("/change/{id}")
+    public ResponseEntity<User> changePassword(@RequestBody User user, @PathVariable Long id){
+        Optional<User> userChange = userService.findById(id);
+        if (userChange.isPresent()){
+            user.setId(userChange.get().getId());
+            user.setName(userChange.get().getName());
+            user.setUsername(userChange.get().getUsername());
+            user.setAddress(userChange.get().getAddress());
+            user.setPhone(userChange.get().getPhone());
+            user.setStatus(userChange.get().getStatus());
+            user.setWallet(userChange.get().getWallet());
+            user.setRoles(userChange.get().getRoles());
+            String encodePassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encodePassword);
+            return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
+        }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
     @PutMapping("/id={id}&status_pending")
     public ResponseEntity<User> activeBlockUser(@PathVariable Long id) {
