@@ -17,7 +17,6 @@ import java.util.Optional;
 public class UserService implements ICrudService<User, Long>, UserDetailsService {
     @Autowired
     private IUserRepository userRepository;
-
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
@@ -59,4 +58,5 @@ public class UserService implements ICrudService<User, Long>, UserDetailsService
         }
         return UserPrinciple.build(userOptional.get());
     }
+
 }
