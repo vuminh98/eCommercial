@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IHistoryBuyRepository extends JpaRepository<HistoryBuy, Long> {
+    Iterable<HistoryBuy> findAllByPaymentId(long id);
 }
