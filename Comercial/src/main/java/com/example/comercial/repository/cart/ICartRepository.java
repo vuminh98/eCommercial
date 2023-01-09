@@ -1,7 +1,7 @@
-package com.example.comercial.repository;
+package com.example.comercial.repository.cart;
 
-import com.example.comercial.model.Cart;
-import com.example.comercial.model.User;
+import com.example.comercial.model.cart.Cart;
+import com.example.comercial.model.login.User;
 import com.example.comercial.model.product.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,8 +17,10 @@ public interface ICartRepository extends JpaRepository<Cart,Long> {
     Optional<Cart> findByProductAndUser(Product product,User user);
     @Modifying
     @Transactional
-    @Query(value="delete from cart a  where a.user_id= :userId", nativeQuery = true)
+    @Query(value="delete from cart a where a.user_id= :userId", nativeQuery = true)
     void deleteAllCartByUserId(@Param("userId") Long userId);
+
+    void deleteByUserIdAndProductId(Long userId, Long productId);
 
     Iterable<Cart> findAllByUserId(Long userId);
 }

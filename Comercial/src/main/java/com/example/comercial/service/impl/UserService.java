@@ -1,8 +1,8 @@
 package com.example.comercial.service.impl;
 
-import com.example.comercial.model.User;
-import com.example.comercial.model.UserPrinciple;
-import com.example.comercial.repository.IUserRepository;
+import com.example.comercial.model.login.User;
+import com.example.comercial.model.login.UserPrinciple;
+import com.example.comercial.repository.login.IUserRepository;
 import com.example.comercial.service.ICrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +17,6 @@ import java.util.Optional;
 public class UserService implements ICrudService<User, Long>, UserDetailsService {
     @Autowired
     private IUserRepository userRepository;
-
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
@@ -50,6 +49,15 @@ public class UserService implements ICrudService<User, Long>, UserDetailsService
         userRepository.save(userSeller);
         userRepository.save(userBuyer);
     }
+    @Transactional
+    public void paymentFalse(Long buyerId,Long sellerId,double totalPrice){
+        User userBuyer = userRepository.findById(buyerId).get();
+        User userSeller = userRepository.findById(sellerId).get();
+        userBuyer.setWallet(userBuyer.getWallet()+totalPrice);
+        userSeller.setWallet(userSeller.getWallet()-totalPrice);
+        userRepository.save(userBuyer);
+        userRepository.save(userSeller);
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -59,4 +67,5 @@ public class UserService implements ICrudService<User, Long>, UserDetailsService
         }
         return UserPrinciple.build(userOptional.get());
     }
+
 }

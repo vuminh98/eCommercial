@@ -1,7 +1,7 @@
-package com.example.comercial.controller;
+package com.example.comercial.controller.login;
 
-import com.example.comercial.model.Role;
-import com.example.comercial.model.User;
+import com.example.comercial.model.login.Role;
+import com.example.comercial.model.login.User;
 import com.example.comercial.service.impl.RoleService;
 import com.example.comercial.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,14 +65,23 @@ public class UserController {
         }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
-    @PutMapping("/id={id}&status_pending")
-    public ResponseEntity<User> activeBlockUser(@PathVariable Long id) {
-        User userUpdate = userService.findById(id).get();
-        if (userUpdate != null) {
-           userUpdate.setStatus(2);
-           return new ResponseEntity<>(userService.save(userUpdate), HttpStatus.OK);
+    @PutMapping("/change/{id}")
+    public ResponseEntity<User> changePassword(@RequestBody User user, @PathVariable Long id){
+        Optional<User> userChange = userService.findById(id);
+        if (userChange.isPresent()){
+            user.setId(userChange.get().getId());
+            user.setName(userChange.get().getName());
+            user.setUsername(userChange.get().getUsername());
+            user.setAddress(userChange.get().getAddress());
+            user.setPhone(userChange.get().getPhone());
+            user.setStatus(userChange.get().getStatus());
+            user.setWallet(userChange.get().getWallet());
+            user.setRoles(userChange.get().getRoles());
+            String encodePassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encodePassword);
+            return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
 }

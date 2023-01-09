@@ -1,6 +1,6 @@
-package com.example.comercial.service;
+package com.example.comercial.service.user;
 
-import com.example.comercial.model.Role;
+import com.example.comercial.model.login.Role;
 
 import java.util.List;
 

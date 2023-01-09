@@ -1,17 +1,12 @@
-package com.example.comercial.model;
+package com.example.comercial.model.login;
 
-import ch.qos.logback.core.boolex.EvaluationException;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Check;
-//import org.springframework.security.core.GrantedAuthority;
-//import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -36,7 +31,10 @@ public class User {
     @Column(unique = true)
     @NotNull
     private String phone;
-    private Double wallet;
+    @NotNull
+    @Column(columnDefinition = "double default 0.0")
+    @Check(constraints = "wallet >= 0")
+    private Double wallet = 0.0;
     @NotNull
     @Column(columnDefinition = "integer default 1")
     private Integer status = 1;

@@ -1,5 +1,6 @@
-package com.example.comercial.model;
+package com.example.comercial.model.product;
 
+import com.example.comercial.model.login.User;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

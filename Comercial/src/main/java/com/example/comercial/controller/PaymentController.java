@@ -1,11 +1,12 @@
 package com.example.comercial.controller;
 
 
-import com.example.comercial.model.HistoryBuy;
-import com.example.comercial.model.Payment;
-import com.example.comercial.model.Review;
+import com.example.comercial.model.cart.HistoryBuy;
+import com.example.comercial.model.cart.Payment;
+import com.example.comercial.model.product.Review;
 import com.example.comercial.service.cart.HistoryBuyService;
 import com.example.comercial.service.cart.PaymentService;
+import com.example.comercial.service.cart.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,8 @@ public class PaymentController {
     private PaymentService paymentService;
     @Autowired
     private HistoryBuyService historyBuyService;
+    @Autowired
+    private ReviewService reviewService;
 
     @GetMapping("/{userId}")
     public ResponseEntity<Iterable<Payment>> findAllByUser(@PathVariable Long userId){
@@ -31,7 +34,7 @@ public class PaymentController {
     @PostMapping("/reviews")
     public ResponseEntity<Review> reviewProduct(@RequestBody Review review){
         try{
-            paymentService.saveReviews(review);
+            reviewService.saveReviews(review);
             return new ResponseEntity<>(new Review(),HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

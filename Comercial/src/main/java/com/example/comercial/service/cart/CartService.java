@@ -1,19 +1,24 @@
 package com.example.comercial.service.cart;
 
-import com.example.comercial.model.Cart;
-import com.example.comercial.model.HistoryBuy;
-import com.example.comercial.model.Payment;
-import com.example.comercial.model.User;
+import com.example.comercial.model.cart.Cart;
+import com.example.comercial.model.cart.HistoryBuy;
+import com.example.comercial.model.cart.Payment;
+import com.example.comercial.model.login.User;
 import com.example.comercial.model.product.Product;
 import com.example.comercial.repository.*;
 //import com.example.comercial.service.impl.UserService;
+
+import com.example.comercial.repository.cart.ICartRepository;
+import com.example.comercial.repository.cart.IHistoryBuyRepository;
+import com.example.comercial.repository.cart.IPaymentRepository;
+import com.example.comercial.repository.login.IUserRepository;
+import com.example.comercial.repository.store.IProductRepository;
+import com.example.comercial.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.TypedQuery;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +31,8 @@ public class CartService {
     private IPaymentRepository paymentRepository;
     @Autowired
     private IHistoryBuyRepository historyBuyRepository;
-//    @Autowired
-//    private UserService userService;
+    @Autowired
+    private UserService userService;
     @Autowired
     private IProductRepository productRepository;
     @Autowired
@@ -107,7 +112,7 @@ public class CartService {
             }
             payment.setTotalPrice(totalPrice);
             paymentRepository.save(payment);
-//            userService.payment(userId,carts.get(0).getProduct().getStore().getUser().getId(),totalPrice);
+            userService.payment(userId,carts.get(0).getProduct().getStore().getUser().getId(),totalPrice);
             return true;
         }catch (Exception e){
             return false;
@@ -117,7 +122,9 @@ public class CartService {
         try{
             Optional<Payment> payment = paymentRepository.findById(paymentId);
             if(payment.isPresent()){
-                cartRepository.deleteAllCartByUserId(payment.get().getUser().getId());
+                for(HistoryBuy historyBuys : historyBuyRepository.findAllByPaymentId(payment.get().getId())){
+                    cartRepository.deleteByUserIdAndProductId(payment.get().getUser().getId(),historyBuys.getProduct().getId());
+                }
                 payment.get().setStatus(true);
                 paymentRepository.save(payment.get());
                 return true;
@@ -136,12 +143,8 @@ public class CartService {
                 for(HistoryBuy historyBuy : historyBuys){
                     historyBuyRepository.deleteById(historyBuy.getId());
                 }
-                User userBuyer = userRepository.findById(payment.get().getUser().getId()).get();
-                User userSeller = userRepository.findById(payment.get().getStore().getUser().getId()).get();
-                userBuyer.setWallet(userBuyer.getWallet()+payment.get().getTotalPrice());
-                userSeller.setWallet(userSeller.getWallet()-payment.get().getTotalPrice());
-                userRepository.save(userBuyer);
-                userRepository.save(userSeller);
+                userService.paymentFalse(payment.get().getUser().getId(),payment.get().getStore().getUser().getId(),
+                        payment.get().getTotalPrice());
                 paymentRepository.deleteById(payment.get().getId());
                 return true;
             }else {

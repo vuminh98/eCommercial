@@ -1,6 +1,6 @@
-package com.example.comercial.repository;
+package com.example.comercial.repository.cart;
 
-import com.example.comercial.model.HistoryBuy;
+import com.example.comercial.model.cart.HistoryBuy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

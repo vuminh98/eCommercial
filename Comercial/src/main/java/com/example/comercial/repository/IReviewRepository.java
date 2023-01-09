@@ -1,6 +1,7 @@
 package com.example.comercial.repository;
 
-import com.example.comercial.model.Review;
+
+import com.example.comercial.model.product.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,9 @@
 package com.example.comercial.service.cart;
 
-import com.example.comercial.model.HistoryBuy;
-import com.example.comercial.repository.IHistoryBuyRepository;
+
+import com.example.comercial.model.cart.HistoryBuy;
+import com.example.comercial.model.product.Review;
+import com.example.comercial.repository.cart.IHistoryBuyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
