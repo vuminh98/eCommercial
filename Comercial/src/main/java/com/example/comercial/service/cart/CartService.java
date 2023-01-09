@@ -1,19 +1,20 @@
 package com.example.comercial.service.cart;
 
-import com.example.comercial.model.Cart;
-import com.example.comercial.model.HistoryBuy;
-import com.example.comercial.model.Payment;
-import com.example.comercial.model.User;
+import com.example.comercial.model.cart.Cart;
+import com.example.comercial.model.cart.HistoryBuy;
+import com.example.comercial.model.cart.Payment;
 import com.example.comercial.model.product.Product;
-import com.example.comercial.repository.*;
+
+import com.example.comercial.repository.cart.ICartRepository;
+import com.example.comercial.repository.cart.IHistoryBuyRepository;
+import com.example.comercial.repository.cart.IPaymentRepository;
+import com.example.comercial.repository.store.IProductRepository;
 import com.example.comercial.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.TypedQuery;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;

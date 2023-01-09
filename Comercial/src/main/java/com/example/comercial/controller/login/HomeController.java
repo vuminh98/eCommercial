@@ -1,6 +1,6 @@
-package com.example.comercial.controller;
+package com.example.comercial.controller.login;
 
-import com.example.comercial.model.User;
+import com.example.comercial.model.login.User;
 import com.example.comercial.security.jwt.JwtResponse;
 import com.example.comercial.security.jwt.JwtService;
 import com.example.comercial.service.impl.UserService;

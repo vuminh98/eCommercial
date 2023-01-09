@@ -1,11 +1,9 @@
-package com.example.comercial.model;
+package com.example.comercial.model.product;
 
-import com.example.comercial.model.product.Product;
-import com.sun.istack.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Check;
 
 import javax.persistence.*;
 
@@ -13,14 +11,12 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Check(constraints = "quantity >= 0")
-public class HistoryBuy {
+public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private Payment payment;
+    private String content;
+    private String rate;
     @ManyToOne
     private Product product;
-    private Integer quantity;
 }

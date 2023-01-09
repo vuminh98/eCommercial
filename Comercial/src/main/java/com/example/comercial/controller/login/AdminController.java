@@ -1,7 +1,7 @@
-package com.example.comercial.controller;
+package com.example.comercial.controller.login;
 
-import com.example.comercial.model.User;
-import com.example.comercial.service.IAdminService;
+import com.example.comercial.model.login.User;
+import com.example.comercial.service.user.IAdminService;
 import com.example.comercial.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

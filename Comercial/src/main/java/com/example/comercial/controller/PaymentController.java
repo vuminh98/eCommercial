@@ -1,7 +1,7 @@
 package com.example.comercial.controller;
 
 
-import com.example.comercial.model.Payment;
+import com.example.comercial.model.cart.Payment;
 import com.example.comercial.service.cart.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

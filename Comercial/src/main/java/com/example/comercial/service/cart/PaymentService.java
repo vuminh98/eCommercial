@@ -1,14 +1,10 @@
 package com.example.comercial.service.cart;
 
-import com.example.comercial.model.Cart;
-import com.example.comercial.model.Payment;
-import com.example.comercial.repository.ICartRepository;
-import com.example.comercial.repository.IPaymentRepository;
+import com.example.comercial.model.cart.Payment;
+import com.example.comercial.repository.cart.IPaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
 @Service
 public class PaymentService {
     @Autowired

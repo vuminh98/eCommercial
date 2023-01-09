@@ -1,8 +1,8 @@
 package com.example.comercial.service.impl;
 
-import com.example.comercial.model.User;
-import com.example.comercial.model.UserPrinciple;
-import com.example.comercial.repository.IUserRepository;
+import com.example.comercial.model.login.User;
+import com.example.comercial.model.login.UserPrinciple;
+import com.example.comercial.repository.login.IUserRepository;
 import com.example.comercial.service.ICrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

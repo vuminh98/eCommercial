@@ -1,7 +1,7 @@
-package com.example.comercial.repository;
+package com.example.comercial.repository.cart;
 
-import com.example.comercial.model.Cart;
-import com.example.comercial.model.User;
+import com.example.comercial.model.cart.Cart;
+import com.example.comercial.model.login.User;
 import com.example.comercial.model.product.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

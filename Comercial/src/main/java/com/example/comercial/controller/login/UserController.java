@@ -1,7 +1,7 @@
-package com.example.comercial.controller;
+package com.example.comercial.controller.login;
 
-import com.example.comercial.model.Role;
-import com.example.comercial.model.User;
+import com.example.comercial.model.login.Role;
+import com.example.comercial.model.login.User;
 import com.example.comercial.service.impl.RoleService;
 import com.example.comercial.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

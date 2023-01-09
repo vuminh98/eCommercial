@@ -1,6 +1,7 @@
 package com.example.comercial.security.jwt;
 
-import com.example.comercial.model.UserPrinciple;
+
+import com.example.comercial.model.login.UserPrinciple;
 import io.jsonwebtoken.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;

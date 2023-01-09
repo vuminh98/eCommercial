@@ -1,6 +1,6 @@
-package com.example.comercial.repository;
+package com.example.comercial.repository.login;
 
-import com.example.comercial.model.Role;
+import com.example.comercial.model.login.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
