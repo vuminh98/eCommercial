@@ -1,6 +1,7 @@
 package com.example.comercial.controller.store;
 
-import com.example.comercial.model.login.User;
+import com.example.comercial.model.cart.HistoryBuy;
+import com.example.comercial.model.cart.Payment;
 import com.example.comercial.model.product.Store;
 import com.example.comercial.service.store.IStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -41,10 +44,10 @@ public class StoreController {
         return new ResponseEntity<>(storeService.findAllByNameStoreContaining(name, pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<Store>> findStoreById(@PathVariable Long id) {
-        return new ResponseEntity<>(storeService.findById(id), HttpStatus.OK);
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Optional<Store>> findStoreById(@PathVariable Long id) {
+//        return new ResponseEntity<>(storeService.findById(id), HttpStatus.OK);
+//    }
 
     @PostMapping("/createStore")
     public ResponseEntity<Store> createStore(@RequestBody Store store) {
@@ -90,4 +93,52 @@ public class StoreController {
         System.out.println(file.getOriginalFilename());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+    @GetMapping("/{storeId}")
+    public ResponseEntity<Iterable<Payment>> findAllPaymentByStore(@PathVariable Long storeId) {
+        try {
+            if (storeService.paymentByStore(storeId) != null) {
+                return new ResponseEntity<>(storeService.paymentByStore(storeId), HttpStatus.OK);
+            }else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @PostMapping("/search_payments")
+    public ResponseEntity<Iterable<Payment>> findAllPaymentBySearch(@RequestPart("key") String key,
+                                                                    @RequestPart("value") String value,
+                                                                    @RequestPart("storeId") String storeId) {
+        try {
+            return new ResponseEntity<>(storeService.paymentsBySearch(key,value,storeId),HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @GetMapping("/one_user")
+    public ResponseEntity<Iterable<Payment>> findAllPaymentByUser(@RequestParam("user") Long user,
+                                                                  @RequestParam("store") Long store) {
+        try {
+            if (storeService.paymentByOneUser(user,store) != null) {
+                return new ResponseEntity<>(storeService.paymentByOneUser(user,store), HttpStatus.OK);
+            }else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @GetMapping("/detail_payment/{paymentId}")
+    public ResponseEntity<Iterable<HistoryBuy>> paymentDetail(@PathVariable Long paymentId) {
+        try {
+            if (storeService.paymentDetails(paymentId) != null) {
+                return new ResponseEntity<>(storeService.paymentDetails(paymentId), HttpStatus.OK);
+            }else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

@@ -3,11 +3,15 @@ package com.example.comercial.service.cart;
 import com.example.comercial.model.cart.Cart;
 import com.example.comercial.model.cart.HistoryBuy;
 import com.example.comercial.model.cart.Payment;
+import com.example.comercial.model.login.User;
 import com.example.comercial.model.product.Product;
+import com.example.comercial.repository.*;
+//import com.example.comercial.service.impl.UserService;
 
 import com.example.comercial.repository.cart.ICartRepository;
 import com.example.comercial.repository.cart.IHistoryBuyRepository;
 import com.example.comercial.repository.cart.IPaymentRepository;
+import com.example.comercial.repository.login.IUserRepository;
 import com.example.comercial.repository.store.IProductRepository;
 import com.example.comercial.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +35,8 @@ public class CartService {
     private UserService userService;
     @Autowired
     private IProductRepository productRepository;
+    @Autowired
+    private IUserRepository userRepository;
 
 
     public Optional<Cart> findCartById(Long id) {
@@ -94,17 +100,56 @@ public class CartService {
             List<Cart> carts = (List<Cart>) cartRepository.findAllByUserId(userId);
             paymentRepository.save(new Payment(0L, carts.get(0).getUser(), carts.get(0).getProduct().getStore(),
                     LocalDate.now(),false,0.0));
-            Payment payment = paymentRepository.findByUserIdAndStoreId(carts.get(0).getUser().getId(),
-                    carts.get(0).getProduct().getStore().getId()).get();
+            Payment payment = paymentRepository.findByUserIdAndStoreIdAndStatus(carts.get(0).getUser().getId(),
+                    carts.get(0).getProduct().getStore().getId(),false).get();
+            Product product ;
             for (Cart cart : carts) {
                 totalPrice += cart.getPrice();
                 historyBuyRepository.save(new HistoryBuy(0L,payment,cart.getProduct(),cart.getQuantity()));
+                product = productRepository.findById(cart.getProduct().getId()).get();
+                product.setQuantity(product.getQuantity() - cart.getQuantity());
+                productRepository.save(product);
             }
             payment.setTotalPrice(totalPrice);
             paymentRepository.save(payment);
-//            cartRepository.deleteAllCartByUserId(userId);
             userService.payment(userId,carts.get(0).getProduct().getStore().getUser().getId(),totalPrice);
             return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+    public boolean accept(Long paymentId){
+        try{
+            Optional<Payment> payment = paymentRepository.findById(paymentId);
+            if(payment.isPresent()){
+                for(HistoryBuy historyBuys : historyBuyRepository.findAllByPaymentId(payment.get().getId())){
+                    cartRepository.deleteByUserIdAndProductId(payment.get().getUser().getId(),historyBuys.getProduct().getId());
+                }
+                payment.get().setStatus(true);
+                paymentRepository.save(payment.get());
+                return true;
+            }else {
+                return false;
+            }
+        }catch (Exception e){
+            return false;
+        }
+    }
+    public boolean deletePayment(Long id){
+        try{
+            Optional<Payment> payment = paymentRepository.findById(id);
+            if(payment.isPresent()){
+                Iterable<HistoryBuy> historyBuys = historyBuyRepository.findAllByPaymentId(payment.get().getId());
+                for(HistoryBuy historyBuy : historyBuys){
+                    historyBuyRepository.deleteById(historyBuy.getId());
+                }
+                userService.paymentFalse(payment.get().getUser().getId(),payment.get().getStore().getUser().getId(),
+                        payment.get().getTotalPrice());
+                paymentRepository.deleteById(payment.get().getId());
+                return true;
+            }else {
+                return false;
+            }
         }catch (Exception e){
             return false;
         }

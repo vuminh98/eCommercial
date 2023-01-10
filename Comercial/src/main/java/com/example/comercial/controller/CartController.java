@@ -60,5 +60,28 @@ public class CartController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
-
+    @GetMapping("/assent/{paymentId}")
+    public ResponseEntity<Payment> accept(@PathVariable("paymentId")Long paymentId){
+        try{
+            if (cartService.accept(paymentId)){
+                return new ResponseEntity<>(new Payment(),HttpStatus.OK);
+            }else {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+    @GetMapping("/delete/{paymentId}")
+    public ResponseEntity<Payment> deletePayment(@PathVariable("paymentId")Long paymentId){
+        try{
+            if (cartService.deletePayment(paymentId)){
+                return new ResponseEntity<>(new Payment(),HttpStatus.OK);
+            }else {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
 }
