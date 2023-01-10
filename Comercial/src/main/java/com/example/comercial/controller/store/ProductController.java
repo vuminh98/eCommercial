@@ -51,8 +51,8 @@ public class ProductController {
     }
 
     @GetMapping("/sortProductByCategory")
-    public ResponseEntity<Page<Product>> sortProductByCategory(@RequestParam("category") String category, @PageableDefault Pageable pageable) {
-        return new ResponseEntity<>(productService.findAllByCategory(category, pageable), HttpStatus.OK);
+    public ResponseEntity<Page<Product>> sortProductByCategory(@RequestParam("id") String id, @PageableDefault Pageable pageable) {
+        return new ResponseEntity<>(productService.findAllByCategory_Id(id, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

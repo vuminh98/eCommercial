@@ -1,6 +1,5 @@
 package com.example.comercial.repository.store;
 
-import com.example.comercial.model.product.Category;
 import com.example.comercial.model.product.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,5 +14,6 @@ public interface IProductRepository extends JpaRepository<Product, Long> {
 
     Page<Product> findAllByPriceBetween(double price1,double price2, Pageable pageable);
 
-    Page<Product> findAllByCategory(Category category, Pageable pageable);
+    Page<Product> findAllByCategory_Id(Long id, Pageable pageable);
+
 }

@@ -49,6 +49,7 @@ public class ProductService implements IProductService {
             return false;
         }
     }
+
     @Override
     public Iterable<Product> findAllByStoreId(Long id) {
         return productRepository.findAllByStoreId(id);
@@ -67,6 +68,11 @@ public class ProductService implements IProductService {
 
     @Override
     public Page<Product> findAllByCategory(String category, Pageable pageable) {
-       return null;
+        return null;
+    }
+
+    @Override
+    public Page<Product> findAllByCategory_Id(String id, Pageable pageable) {
+        return productRepository.findAllByCategory_Id(Long.parseLong(id), pageable);
     }
 }

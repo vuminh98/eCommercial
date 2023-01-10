@@ -13,4 +13,6 @@ public interface IProductService extends IGeneralService<Product> {
     Page<Product> findAllByPriceBetween(String price1,String price2, Pageable pageable);
 
     Page<Product> findAllByCategory(String category, Pageable pageable);
+
+    Page<Product> findAllByCategory_Id(String id, Pageable pageable);
 }
