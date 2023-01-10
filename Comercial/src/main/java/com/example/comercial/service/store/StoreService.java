@@ -53,4 +53,5 @@ public class StoreService implements IStoreService {
     public Page<Store> findAllByNameStoreContaining(String name, Pageable pageable) {
         return storeRepository.findAllByNameStoreContaining(name, pageable);
     }
+
 }

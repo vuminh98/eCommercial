@@ -1,5 +1,6 @@
 package com.example.comercial.controller.store;
 
+import com.example.comercial.model.login.User;
 import com.example.comercial.model.product.Store;
 import com.example.comercial.service.store.IStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,6 @@ public class StoreController {
     public ResponseEntity<Optional<Store>> findStoreById(@PathVariable Long id) {
         return new ResponseEntity<>(storeService.findById(id), HttpStatus.OK);
     }
-
 
     @PostMapping("/createStore")
     public ResponseEntity<Store> createStore(@RequestBody Store store) {
